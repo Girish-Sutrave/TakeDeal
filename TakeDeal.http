@@ -1,0 +1,6 @@
+@TakeDeal_HostAddress = http://localhost:5230
+
+GET {{TakeDeal_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
