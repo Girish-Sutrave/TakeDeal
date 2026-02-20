@@ -23,6 +23,9 @@ namespace TakeDeal.Models
         [Required]
         public string City { get; set; } = string.Empty;
 
+        [Required]
+        public string State { get; set; } = string.Empty;
+
         // 🔗 Category relation
         [Required]
         public int CategoryId { get; set; }

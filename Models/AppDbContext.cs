@@ -21,13 +21,19 @@ namespace TakeDeal.Models
             modelBuilder.Entity<Category>().HasOne(c=>c.ParentCategory).WithMany(c=>c.SubCategories)
                 .HasForeignKey(c => c.ParentCategoryId).OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Listing>().HasOne(l => l.User).WithMany().HasForeignKey(l => l.CategoryId).OnDelete(DeleteBehavior.Cascade);
+            // Listing → User
+            modelBuilder.Entity<Listing>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId)   // ✅ CORRECT
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Listing → Category
             modelBuilder.Entity<Listing>()
                 .HasOne(l => l.Category)
                 .WithMany()
-                .HasForeignKey(l => l.CategoryId)
+                .HasForeignKey(l => l.CategoryId)   // ✅ CORRECT
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

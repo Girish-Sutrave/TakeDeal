@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Generators;
 using TakeDeal.DTOs;
 using TakeDeal.Models;
+using TakeDeal.Services;
 
 namespace TakeDeal.Controllers
 {
@@ -12,10 +13,12 @@ namespace TakeDeal.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly TokenService _tokenService;
 
-        public AuthController(AppDbContext context)
+        public AuthController(AppDbContext context,TokenService tokenService)
         {
             this._context = context;
+            this._tokenService = tokenService;
         }
 
         [HttpPost]
@@ -47,6 +50,7 @@ namespace TakeDeal.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -64,10 +68,13 @@ namespace TakeDeal.Controllers
             if (!isPasswordValid)
                 return Unauthorized("Invalid email or password");
 
+            var token = _tokenService.CreateToken(user);
+
             // 3️⃣ SUCCESS (temporary response — JWT next)
             return Ok(new
             {
                 message = "Login successful",
+                token = token,
                 userId = user.Id,
                 name = user.Name,
                 email = user.Email
